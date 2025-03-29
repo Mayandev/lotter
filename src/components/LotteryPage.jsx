@@ -11,7 +11,7 @@ import clock from '../assets/clock.jpg';  // 添加图片导入
 import fuwocheng from '../assets/fuwocheng.jpg';  // 添加图片导入
 import redpack from '../assets/redpack.png';  // 添加图片导入
 import magic from '../assets/magic.png';  // 添加图片导入\
-import trans from '../assets/trans.png'; 
+import trans from '../assets/trans.png';
 
 const prizes = [
   { id: 1, type: 'gift', content: '请欣赏邹明远的魔术表演🪄🪄', image: magic },
@@ -40,7 +40,8 @@ const Container = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  overflow-y: auto;
+  overflow: hidden;  // 修改这里
+  touch-action: none;  // 添加这行
 `;
 
 const Title = styled(motion.h1)`
@@ -97,7 +98,7 @@ const ScratchResult = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: ${props => props.image ? `url(${props.image}) center/contain no-repeat` : 'white'};
+  background: ${props => props.image ? `url(${props.image}) center/cover` : 'white'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,7 +107,6 @@ const ScratchResult = styled.div`
   font-weight: bold;
   padding: 20px;
   text-align: center;
-  background-color: white;
 `;
 
 const Canvas = styled.canvas`
@@ -238,6 +238,7 @@ function LotteryPage() {
   };
 
   const handleScratch = (e) => {
+    e.preventDefault();
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     const rect = canvas.getBoundingClientRect();
@@ -312,6 +313,7 @@ function LotteryPage() {
           ref={canvasRef}
           onMouseMove={(e) => e.buttons === 1 && handleScratch(e)}
           onTouchMove={handleScratch}
+          onTouchStart={(e) => e.preventDefault()}  // 添加这行
         />
       </ScratchCard>
 
